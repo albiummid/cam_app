@@ -1,29 +1,33 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { defaultConfig } from "@tamagui/config/v4";
+import { createTamagui, TamaguiProvider } from "@tamagui/core";
+import { Toast, ToastProvider, ToastViewport } from "@tamagui/toast";
+import { Stack } from "expo-router";
+import { PortalProvider } from "tamagui";
+// you usually export this from a tamagui.config.ts file
+const config = createTamagui(defaultConfig);
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+type Conf = typeof config;
 
+// make imports typed
+declare module "@tamagui/core" {
+    interface TamaguiCustomConfig extends Conf {}
+}
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+    return (
+        <TamaguiProvider config={config}>
+            <PortalProvider>
+                <ToastProvider>
+                    <Toast>
+                        <Toast.Title />
+                        <Toast.Description />
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+                        <Toast.Close />
+                    </Toast>
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+                    <ToastViewport />
+                </ToastProvider>
+                <Stack screenOptions={{ headerShown: false }} />
+            </PortalProvider>
+        </TamaguiProvider>
+    );
 }
