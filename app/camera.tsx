@@ -6,7 +6,6 @@ import {
     Image as ImageIcon,
     RotateCcw,
 } from "@tamagui/lucide-icons";
-import { useToastController } from "@tamagui/toast";
 import { Camera, CameraView } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { router } from "expo-router";
@@ -24,7 +23,6 @@ export default function CameraScreen() {
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const cameraRef = useRef<any>(null);
-    const toast = useToastController();
 
     useEffect(() => {
         (async () => {
